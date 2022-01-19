@@ -1,0 +1,1 @@
+/mnt/d/git/sparselizard/simulations/default/disk.geo
