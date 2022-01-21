@@ -2,7 +2,6 @@ import pickle
 import numpy as np
 import matplotlib as plt
 from spylizard import *
-from spylizard_stubs import *
 
 mymesh = mesh()
 mymesh.load("h_magnet.msh")
