@@ -8,7 +8,7 @@ mymesh.load("magnet_in_room.msh")
 
 mur_wall = 1000
 b_r_magnet = 1.5
-formulationType = 1
+formulationType = 0
 Az_only = True
 
 pi = getpi()
@@ -26,11 +26,12 @@ mu.setvalue(wall, mu0*mur_wall)
 magnetostatics = formulation()
 if formulationType == 0:
     phi = field("h1")
-    phi.setorder(wholedomain, 2)
+    phi.setorder(wholedomain, 1)
     phi.setconstraint(inf)
     br = parameter(2,1)
     br.setvalue(wholedomain, array2x1(0, 0))
-    br.setvalue(magnet, array2x1(-b_r_magnet, 0))
+    br.setvalue(magnet, array2x1(b_r_magnet, 0))
+    br.write(wholedomain, "magnet_in_room_phi_br.vtk", 1)
     magnetostatics += integral(wholedomain, - grad(dof(phi)) * mu * grad(tf(phi)))
     magnetostatics += integral(magnet, br * grad(tf(phi)))
 else:
@@ -47,7 +48,7 @@ else:
         A.setgauge(wholedomain)
     br = parameter(3,1)
     br.setvalue(wholedomain, array3x1(0, 0, 0))
-    br.setvalue(magnet, array3x1(-b_r_magnet, 0, 0))
+    br.setvalue(magnet, array3x1(b_r_magnet, 0, 0))
     magnetostatics += integral(wholedomain,  1/mu * curl(dof(A)) * curl(tf(A)))
     magnetostatics += integral(magnet, - br/mu * curl(tf(A)))
 
@@ -62,6 +63,9 @@ if formulationType == 0:
     phi.setdata(wholedomain, sol)
     h = (-grad(phi))
     b = mu*h + br
+    phi.write(wholedomain, "magnet_in_room_phi.vtk", 0)
+    h.write(wholedomain, "magnet_in_room_h.vtk", 1)
+    h.write(wholedomain, "magnet_in_room_B.vtk", 1)
 else:
     if Az_only:
         Az.setdata(wholedomain, sol)
