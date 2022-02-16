@@ -42,14 +42,13 @@ if formulationType == 0:
     magnetostatics += integral(wholedomain, - grad(dof(phi)) * mu * grad(tf(phi)))
     magnetostatics += integral(magnet, br * grad(tf(phi)))
 else:
-    treedomain = selectunion([magnet, air, frame, inf, innerXYBoundary, magnetXYBoundary])
-    spantree = spanningtree([treedomain])
+    spantree = spanningtree([innerXZBoundary,innerYZBoundary])
     spantree.write("octant_spantree.pos")
     A = field("hcurl", spantree)
     A.setorder(wholedomain, 0)   # TODO: make higher orders work without gauging
     A.setconstraint(innerXZBoundary) # magnetic isolator
     A.setconstraint(innerYZBoundary) # magnetic isolator
-    A.setgauge(treedomain) # gauging with tree-cotree destroys the PMC BC
+    A.setgauge(wholedomain) # gauging with tree-cotree destroys the PMC BC
     # natural neumann boundary condition on wholeXYBoundary is perfect magnetic conductor
     magnetostatics += integral(wholedomain,  1/mu * curl(dof(A)) * curl(tf(A)))
     magnetostatics += integral(magnet, - br/mu * curl(tf(A)))
