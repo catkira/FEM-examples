@@ -4,11 +4,10 @@ import matplotlib as plt
 from spylizard import *
 
 mymesh = mesh()
-mymesh.load("magmesh.msh")
+mymesh.load("magmesh_coarse.msh")
+#mymesh.load("magmesh.msh")
 
 mur_frame = 1000
-mur_magnet = 1
-b_r_magnet = 1.5
 formulationType = 1
 
 pi = getpi()
@@ -23,9 +22,11 @@ mu.setvalue(wholedomain, mu0)
 mu.setvalue(shield, mu0*mur_frame)
 
 magnetostatics = formulation()
-spantree = spanningtree([wholedomain])
+spantree = spanningtree([inf])
 A = field("hcurl", spantree)
-A.setorder(wholedomain, 1)
+A.setorder(shield, 1)
+A.setorder(air, 1)
+A.setorder(conductor, 1)
 A.setconstraint(inf)
 A.setgauge(wholedomain)
 magnetostatics += integral(wholedomain,  1/mu * curl(dof(A)) * curl(tf(A)))
@@ -41,6 +42,7 @@ sol = solve(magnetostatics.A(), magnetostatics.b())
 A.setdata(wholedomain, sol)
 b = curl(A)
 b.write(wholedomain, "b.pos", 1)
+b.write(wholedomain, "b.vtk", 1)
 norm(b).write(wholedomain, "b_norm.pos", 1)
 
 

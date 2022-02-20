@@ -21,16 +21,15 @@ Characteristic Length {3} = 0.04;
 
 Coherence;
 
-Recombine Surface(1);
-Recombine Surface(3);
-Recombine Surface(4);
-Recombine Surface(5);
+//Recombine Surface(1);
+//Recombine Surface(3);
+//Recombine Surface(4);
+//Recombine Surface(5);
 
-nz = 1;
-Extrude {0,0,h} { Surface{1}; Layers{nz}; Recombine;}
-Extrude {0,0,h} { Surface{3}; Layers{nz}; Recombine;}
-Extrude {0,0,h} { Surface{4}; Layers{nz}; Recombine;}
-Extrude {0,0,h} { Surface{5}; Layers{nz}; Recombine;}
+Extrude {0,0,h} { Surface{1};}
+Extrude {0,0,h} { Surface{3};}
+Extrude {0,0,h} { Surface{4};}
+Extrude {0,0,h} { Surface{5};}
 
 
 // Define the physical regions:
