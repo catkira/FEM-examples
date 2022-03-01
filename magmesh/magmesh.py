@@ -4,8 +4,8 @@ import matplotlib as plt
 from spylizard import *
 
 mymesh = mesh()
-mymesh.load("magmesh_coarse.msh")
-#mymesh.load("magmesh.msh")
+#mymesh.load("magmesh_coarse.msh")
+mymesh.load("magmesh.msh")
 
 mur_frame = 1000
 formulationType = 1
