@@ -76,7 +76,8 @@ magdyn = formulation()
 #
 # Magnetic equation:
 magdyn += integral(wholedomain, 1/mu* curl(dof(a)) * curl(tf(a)) )
-#magdyn += integral(conductor, sigma*dt(dof(a))*tf(a) + sigma* grad(dof(v))*tf(a) )
+#magdyn += integral(conductor, sigma*dt(dof(a))*tf(a))
+magdyn += integral(conductor, sigma* grad(dof(v))*tf(a))
 # Electric equation:
 magdyn += integral(conductor, sigma*grad(dof(v))*grad(tf(v))  )
 #magdyn += integral(conductor, sigma*dt(dof(a))*grad(tf(v)) );
