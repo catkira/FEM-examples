@@ -76,9 +76,10 @@ magdyn = formulation()
 #
 # Magnetic equation:
 magdyn += integral(wholedomain, 1/mu* curl(dof(a)) * curl(tf(a)) )
-magdyn += integral(conductor, sigma*dt(dof(a))*tf(a) + sigma* grad(dof(v))*tf(a) )
+#magdyn += integral(conductor, sigma*dt(dof(a))*tf(a) + sigma* grad(dof(v))*tf(a) )
 # Electric equation:
-magdyn += integral(conductor, sigma*grad(dof(v))*grad(tf(v)) + sigma*dt(dof(a))*grad(tf(v)) )
+magdyn += integral(conductor, sigma*grad(dof(v))*grad(tf(v))  )
+#magdyn += integral(conductor, sigma*dt(dof(a))*grad(tf(v)) );
 
 # Generate, solve and transfer the solution to fields a and v:
 magdyn.solve()
@@ -88,6 +89,7 @@ e = -dt(a) - grad(v)
 
 curl(a).write(wholedomain, "b.pos", 1)
 e.write(conductor, "e.pos", 1)
+e.write(conductor, "e.vtk", 1)
 (sigma*e).write(conductor, "j.pos", 1)
 v.write(conductor, "v.pos", 1)
 
