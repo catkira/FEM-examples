@@ -75,18 +75,18 @@ magdyn = formulation()
 # curl( 1/mu * curl(a) ) + sigma * (dt(a) + grad(v)) = js, with b = curl(a) and e = -dt(a) - grad(v)
 #
 # Magnetic equation:
-magdyn += integral(wholedomain, 1/mu* curl(dof(a)) * curl(tf(a)) )
-#magdyn += integral(conductor, sigma*dt(dof(a))*tf(a))
-magdyn += integral(conductor, sigma* grad(dof(v))*tf(a))
+magdyn += integral(wholedomain, 1/mu * curl(dof(a)) * curl(tf(a)))
+magdyn += integral(conductor, sigma * dt(dof(a)) * tf(a))
+magdyn += integral(conductor, sigma * grad(dof(v)) * tf(a))
 # Electric equation:
-magdyn += integral(conductor, sigma*grad(dof(v))*grad(tf(v))  )
-#magdyn += integral(conductor, sigma*dt(dof(a))*grad(tf(v)) )
+magdyn += integral(conductor, sigma * grad(dof(v)) * grad(tf(v)))
+#magdyn += integral(conductor, sigma * dt(dof(a)) * grad(tf(v)))
 
 # Generate, solve and transfer the solution to fields a and v:
 magdyn.solve()
 
 # Write the magnetic induction field b = curl(a) [T], electric field e = -dt(a) - grad(v) [V/m] and current density j [A/m^2]:
-e = -dt(a) - grad(v)
+e = -dt(a) -grad(v)
 
 curl(a).write(wholedomain, "b.pos", 1)
 curl(a).write(wholedomain, "b.vtk", 1)
