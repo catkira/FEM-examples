@@ -94,6 +94,7 @@ e.write(conductor, "e.pos", 1)
 e.write(conductor, "e.vtk", 1)
 (sigma*e).write(conductor, "j.pos", 1)
 v.write(conductor, "v.pos", 1)
+v.write(conductor, "v.vtk", 1)
 
 # Code validation line. Can be removed:
 minj = norm(sigma*(-2*getpi()*50*a.harmonic(2) - grad(v.harmonic(3)))).min(tube,4)[0]
