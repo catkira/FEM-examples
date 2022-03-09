@@ -27,7 +27,7 @@ vout = 7
 domainboundary = 8
 
 conductor = selectunion([coil,tube])
-wholedomain = selectunion([coil, tube, air, coilskin, tubeskin, vin, vout, domainboundary])
+wholedomain = selectunion([coil, tube, air, vin, vout, domainboundary])
 domainboundary = selectunion([domainboundary, vin, vout])
 
 mu = parameter()
@@ -44,6 +44,8 @@ setfundamentalfrequency(50)
 # Define a spanning tree to gauge the magnetic vector potential (otherwise the matrix to invert is singular).
 # Start growing the tree from the regions with constrained potential vector (here the domain boundary): 
 spantree = spanningtree([domainboundary])
+spantree.write("inductionheating_spantree.pos")
+print(f'Tree has {spantree.countedgesintree():d} nodes')
 
 # Use nodal shape functions 'h1' for the electric scalar potential 'v'.
 # Use edge shape functions 'hcurl' for the magnetic vector potential 'a'.
@@ -83,10 +85,14 @@ magdyn += integral(conductor, sigma * grad(dof(v)) * grad(tf(v)))
 #magdyn += integral(conductor, sigma * dt(dof(a)) * grad(tf(v)))
 
 # Generate, solve and transfer the solution to fields a and v:
+matA = magdyn.A(True)
+print("A has " + str(matA.countrows()) + " rows")
+print("ainds has " + str(matA.getainds().countrows()) + " rows")
+print("dinds has " + str(matA.getdinds().countrows()) + " rows")
 magdyn.solve()
 
 # Write the magnetic induction field b = curl(a) [T], electric field e = -dt(a) - grad(v) [V/m] and current density j [A/m^2]:
-e = -dt(a) -grad(v)
+e = -grad(v) #-dt(a) 
 
 curl(a).write(wholedomain, "b.pos", 1)
 curl(a).write(wholedomain, "b.vtk", 1)
