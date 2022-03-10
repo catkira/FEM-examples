@@ -34,8 +34,9 @@ if formulationType == 0:
     magnetostatics += integral(wholedomain, - grad(dof(phi)) * mu * grad(tf(phi)))
     magnetostatics += integral(magnet, br * grad(tf(phi)))
 else:
-    spantree = spanningtree([inf])
+    spantree = spanningtree([])
     spantree.write("h_magnet_spanntree.pos")
+    print(f'edges in tree {spantree.countedgesintree()}')
     A = field("hcurl", spantree)
     A.setorder(wholedomain, 0)
     A.setconstraint(inf)
@@ -45,6 +46,8 @@ else:
 
 magnetostatics.generate()
 matA = magnetostatics.A(True)
+vecb = magnetostatics.b(True)
+vecb.write("rhs.txt")
 print("A has " + str(matA.countrows()) + " rows")
 print("ainds has " + str(matA.getainds().countrows()) + " rows")
 print("dinds has " + str(matA.getdinds().countrows()) + " rows")
