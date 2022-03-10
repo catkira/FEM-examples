@@ -34,16 +34,14 @@ if formulationType == 0:
     magnetostatics += integral(wholedomain, - grad(dof(phi)) * mu * grad(tf(phi)))
     magnetostatics += integral(magnet, br * grad(tf(phi)))
 else:
-    spantree = spanningtree([wholedomain])
-    #spantree = spanningtree([inf])
+    spantree = spanningtree([inf])
     spantree.write("h_magnet_spanntree.pos")
-    A = field("hcurl")
+    A = field("hcurl", spantree)
     A.setorder(wholedomain, 0)
-    #A.setconstraint(inf)
-    #A.setgauge(wholedomain)
+    A.setconstraint(inf)
+    A.setgauge(wholedomain)
     magnetostatics += integral(wholedomain,  1/mu * curl(dof(A)) * curl(tf(A)))
     magnetostatics += integral(magnet, - br/mu * curl(tf(A)))
-    #magnetostatics += integral(inf, 1e9 * dof(A) * tf(A)) # dirichlet BC
 
 magnetostatics.generate()
 matA = magnetostatics.A(True)

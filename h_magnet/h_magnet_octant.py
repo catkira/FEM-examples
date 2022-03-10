@@ -48,7 +48,7 @@ else:
     A.setorder(wholedomain, 0)   # TODO: make higher orders work without gauging
     A.setconstraint(innerXZBoundary) # magnetic isolator
     A.setconstraint(innerYZBoundary) # magnetic isolator
-    A.setgauge(wholedomain) # gauging with tree-cotree destroys the PMC BC
+    A.setgauge(wholedomain)
     # natural neumann boundary condition on wholeXYBoundary is perfect magnetic conductor
     magnetostatics += integral(wholedomain,  1/mu * curl(dof(A)) * curl(tf(A)))
     magnetostatics += integral(magnet, - br/mu * curl(tf(A)))
