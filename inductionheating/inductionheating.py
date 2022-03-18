@@ -82,7 +82,7 @@ magdyn += integral(conductor, sigma * dt(dof(a)) * tf(a))
 magdyn += integral(conductor, sigma * grad(dof(v)) * tf(a))
 # Electric equation:
 magdyn += integral(conductor, sigma * grad(dof(v)) * grad(tf(v)))
-#magdyn += integral(conductor, sigma * dt(dof(a)) * grad(tf(v)))
+magdyn += integral(conductor, sigma * dt(dof(a)) * grad(tf(v)))
 
 # Generate, solve and transfer the solution to fields a and v:
 matA = magdyn.A(True)
@@ -92,7 +92,7 @@ print("dinds has " + str(matA.getdinds().countrows()) + " rows")
 magdyn.solve()
 
 # Write the magnetic induction field b = curl(a) [T], electric field e = -dt(a) - grad(v) [V/m] and current density j [A/m^2]:
-e = -grad(v) #-dt(a) 
+e = -grad(v) -dt(a) 
 
 curl(a).write(wholedomain, "b.pos", 1)
 curl(a).write(wholedomain, "b.vtk", 1)
